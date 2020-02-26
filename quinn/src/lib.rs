@@ -76,8 +76,7 @@ pub use streams::{
     WriteError,
 };
 
-mod tls;
-pub use tls::{Certificate, CertificateChain, ParseError, PrivateKey};
+pub use proto::crypto::types::{Certificate, CertificateChain, ParseError, PrivateKey};
 
 #[cfg(test)]
 mod tests;
