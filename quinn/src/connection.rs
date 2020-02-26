@@ -15,8 +15,8 @@ use futures::{
     channel::{mpsc, oneshot},
     FutureExt, StreamExt,
 };
-use proto::crypto::types::Certificate;
-use proto::{ConnectionError, ConnectionHandle, Dir, StreamId};
+use proto::crypto::{types::Certificate, Session as _};
+use proto::{AuthenticationData, ConnectionError, ConnectionHandle, Dir, StreamId};
 use tokio::time::{delay_until, Delay, Instant as TokioInstant};
 use tracing::info_span;
 
@@ -297,6 +297,18 @@ impl Connection {
     /// switching to a cellular internet connection.
     pub fn remote_address(&self) -> SocketAddr {
         self.0.lock().unwrap().inner.remote_address()
+    }
+
+    /// The connection's authentication data
+    ///
+    /// Data exchanged or negotiated during the (TLS) cryptographic handshake.
+    pub fn authentication_data(&self) -> AuthenticationData {
+        self.0
+            .lock()
+            .unwrap()
+            .inner
+            .crypto_session()
+            .authentication_data()
     }
 
     /// The negotiated application protocol
